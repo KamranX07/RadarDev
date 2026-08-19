@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpportunityRadar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>OpportunityRadar 🚀</h1>
+        <p>Discover hackathons without searching dozens of pages.</p>
+    </div>
+</header>
+
+<main>
+
+    <section class="controls">
+        <input
+            type="text"
+            id="search"
+            placeholder="Search hackathons, themes..."
+        >
+
+        <select id="mode">
+            <option value="">All modes</option>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+        </select>
+
+        <select id="status">
+            <option value="">All status</option>
+            <option value="Open">Open</option>
+            <option value="Upcoming">Upcoming</option>
+            <option value="Ended">Ended</option>
+        </select>
+    </section>
+
+    <section class="stats">
+        <div>
+            <strong>{{ opportunities|length }}</strong>
+            <span>Hackathons</span>
+        </div>
+
+        <div>
+            <strong>🟢</strong>
+            <span>Scraper Healthy</span>
+        </div>
+
+        <div>
+            <strong>Bright Data</strong>
+            <span>Data Source</span>
+        </div>
+    </section>
+
+    <section id="hackathons" class="grid">
+
+        {% for item in opportunities %}
+
+        <article
+            class="card"
+            data-name="{{ item.name|lower }}"
+            data-themes="{{ item.themes|join(' ')|lower }}"
+            data-mode="{{ item.mode }}"
+            data-status="{{ item.status }}"
+        >
+
+            <div class="card-top">
+                <span class="badge">{{ item.status }}</span>
+                <span class="mode">{{ item.mode }}</span>
+            </div>
+
+            <h2>{{ item.name }}</h2>
+
+            <div class="themes">
+                {% for theme in item.themes %}
+                    <span>{{ theme }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="details">
+                <p>📅 {{ item.start_date or "Date unavailable" }}</p>
+                <p>👥 {{ item.participation_count }} participants</p>
+            </div>
+
+            <a
+                href="{{ item.hackathon_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button"
+            >
+                View Hackathon →
+            </a>
+
+        </article>
+
+        {% endfor %}
+
+    </section>
+
+</main>
+
+<script>
+const search = document.getElementById("search");
+const mode = document.getElementById("mode");
+const status = document.getElementById("status");
+const cards = document.querySelectorAll(".card");
+
+function filterCards() {
+
+    const query = search.value.toLowerCase();
+    const selectedMode = mode.value;
+    const selectedStatus = status.value;
+
+    cards.forEach(card => {
+
+        const matchesSearch =
+            card.dataset.name.includes(query) ||
+            card.dataset.themes.includes(query);
+
+        const matchesMode =
+            !selectedMode ||
+            card.dataset.mode === selectedMode;
+
+        const matchesStatus =
+            !selectedStatus ||
+            card.dataset.status === selectedStatus;
+
+        card.style.display =
+            matchesSearch && matchesMode && matchesStatus
+                ? ""
+                : "none";
+    });
+}
+
+search.addEventListener("input", filterCards);
+mode.addEventListener("change", filterCards);
+status.addEventListener("change", filterCards);
+</script>
+
+</body>
+</html>
