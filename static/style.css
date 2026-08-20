@@ -144,3 +144,15 @@ main {
         flex-direction: column;
     }
 }
+
+#health-card {
+    transition: 0.2s;
+}
+
+#health-card.healthy {
+    border-color: #2ecc71;
+}
+
+#health-card.degraded {
+    border-color: #f39c12;
+}

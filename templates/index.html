@@ -40,20 +40,22 @@
     </section>
 
     <section class="stats">
-        <div>
-            <strong>{{ opportunities|length }}</strong>
-            <span>Hackathons</span>
-        </div>
 
-        <div>
-            <strong>🟢</strong>
-            <span>Scraper Healthy</span>
-        </div>
+    <div>
+        <strong>{{ opportunities|length }}</strong>
+        <span>Hackathons</span>
+    </div>
 
-        <div>
-            <strong>Bright Data</strong>
-            <span>Data Source</span>
-        </div>
+    <div id="health-card">
+        <strong id="health-status">Checking...</strong>
+        <span>Scraper Health</span>
+    </div>
+
+    <div>
+        <strong>Bright Data</strong>
+        <span>Data Source</span>
+    </div>
+
     </section>
 
     <section id="hackathons" class="grid">
@@ -139,6 +141,38 @@ function filterCards() {
 search.addEventListener("input", filterCards);
 mode.addEventListener("change", filterCards);
 status.addEventListener("change", filterCards);
+</script>
+
+
+<script>
+async function checkHealth() {
+    try {
+        const response = await fetch("/health");
+        const data = await response.json();
+
+        const status = document.getElementById("health-status");
+        const card = document.getElementById("health-card");
+
+        if (data.status === "healthy") {
+            status.textContent = "🟢 Healthy " + data.data_quality + "%";
+            card.classList.add("healthy");
+        } else if (data.status === "degraded") {
+            status.textContent = "🟠 Degraded " + data.data_quality + "%";
+            card.classList.add("degraded");
+        } else {
+            status.textContent = "🔴 Critical";
+            card.classList.add("degraded");
+        }
+
+        console.log("Scraper health:", data);
+
+    } catch (error) {
+        document.getElementById("health-status").textContent =
+            "🔴 Offline";
+    }
+}
+
+checkHealth();
 </script>
 
 </body>
