@@ -35,6 +35,7 @@
             <option value="">All status</option>
             <option value="Open">Open</option>
             <option value="Upcoming">Upcoming</option>
+            <option value="Live">Live</option>
             <option value="Ended">Ended</option>
         </select>
     </section>
@@ -42,7 +43,7 @@
     <section class="stats">
 
     <div>
-        <strong>{{ opportunities|length }}</strong>
+        <strong id="hackathon-count">{{ opportunities|length }}</strong>
         <span>Hackathons</span>
     </div>
 
@@ -84,7 +85,16 @@
             </div>
 
             <div class="details">
-                <p>📅 {{ item.start_date or "Date unavailable" }}</p>
+                <p>
+                    📅
+                    {% if item.start_date %}
+                        {{ item.start_date }}
+                    {% elif item.status == "Ended" %}
+                        Event ended
+                    {% else %}
+                        Date unavailable
+                    {% endif %}
+                </p>
                 <p>👥 {{ item.participation_count }} participants</p>
             </div>
 
@@ -102,6 +112,9 @@
         {% endfor %}
 
     </section>
+    <p id="no-results" class="no-results" style="display: none;">
+        No hackathons match your search or filters.
+    </p>
 
 </main>
 
@@ -111,38 +124,60 @@ const mode = document.getElementById("mode");
 const status = document.getElementById("status");
 const cards = document.querySelectorAll(".card");
 
+const hackathonCount = document.getElementById("hackathon-count");
+const noResults = document.getElementById("no-results");
+
 function filterCards() {
 
-    const query = search.value.toLowerCase();
+    const query = search.value.trim().toLowerCase();
     const selectedMode = mode.value;
     const selectedStatus = status.value;
 
+    let visibleCount = 0;
+
     cards.forEach(card => {
 
+        const name = card.dataset.name || "";
+        const themes = card.dataset.themes || "";
+        const cardMode = card.dataset.mode || "";
+        const cardStatus = card.dataset.status || "";
+
         const matchesSearch =
-            card.dataset.name.includes(query) ||
-            card.dataset.themes.includes(query);
+            name.includes(query) ||
+            themes.includes(query);
 
         const matchesMode =
             !selectedMode ||
-            card.dataset.mode === selectedMode;
+            cardMode === selectedMode;
 
         const matchesStatus =
             !selectedStatus ||
-            card.dataset.status === selectedStatus;
+            cardStatus === selectedStatus;
 
-        card.style.display =
-            matchesSearch && matchesMode && matchesStatus
-                ? ""
-                : "none";
+        const visible =
+            matchesSearch &&
+            matchesMode &&
+            matchesStatus;
+
+        card.style.display = visible ? "" : "none";
+
+        if (visible) {
+            visibleCount++;
+        }
     });
+
+    hackathonCount.textContent = visibleCount;
+
+    noResults.style.display =
+        visibleCount === 0 ? "block" : "none";
 }
 
 search.addEventListener("input", filterCards);
 mode.addEventListener("change", filterCards);
 status.addEventListener("change", filterCards);
-</script>
 
+filterCards();
+</script>
 
 <script>
 async function checkHealth() {

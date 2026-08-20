@@ -4,11 +4,9 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-
 def load_data():
     with open("opportunities.json", "r", encoding="utf-8") as file:
         return json.load(file)
-
 
 @app.route("/")
 def home():
@@ -19,6 +17,10 @@ def home():
         opportunities=opportunities
     )
 
+@app.route("/api/opportunities")
+def api_opportunities():
+    opportunities = load_data()
+    return jsonify(opportunities)
 
 @app.route("/health")
 def health():
@@ -89,7 +91,6 @@ def health():
         "optional_missing": missing_optional,
         "checked_at": datetime.now().isoformat(timespec="seconds")
     })
-
 
 if __name__ == "__main__":
     app.run(debug=True)
