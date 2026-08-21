@@ -14,36 +14,6 @@
     }
   },
   {
-    "name": "CodeWars1.0",
-    "themes": [
-      "No Restrictions"
-    ],
-    "mode": "Offline",
-    "status": "Open",
-    "start_date": "Starts 22/08/26",
-    "participation_count": 250,
-    "hackathon_url": "https://codewars-2.devfolio.co/",
-    "product_page_url": "https://codewars-2.devfolio.co/",
-    "input": {
-      "url": "https://devfolio.co/hackathons"
-    }
-  },
-  {
-    "name": "RevengersHack",
-    "themes": [
-      "No Restrictions"
-    ],
-    "mode": "Online",
-    "status": "Open",
-    "start_date": "Starts 22/08/26",
-    "participation_count": 500,
-    "hackathon_url": "https://revengershack.devfolio.co/",
-    "product_page_url": "https://revengershack.devfolio.co/",
-    "input": {
-      "url": "https://devfolio.co/hackathons"
-    }
-  },
-  {
     "name": "Road to Devcon - NITK Surathkal",
     "themes": [
       "Blockchain",
@@ -60,16 +30,15 @@
     }
   },
   {
-    "name": "VENTURE'26",
+    "name": "Dora Hack 2.0",
     "themes": [
       "No Restrictions"
     ],
-    "mode": "Offline",
+    "mode": "Online",
     "status": "Open",
-    "start_date": "Starts 10/09/26",
-    "participation_count": 250,
-    "hackathon_url": "https://venture-26.devfolio.co/",
-    "product_page_url": "https://venture-26.devfolio.co/",
+    "participation_count": 1000,
+    "hackathon_url": "https://dora-hack.devfolio.co/",
+    "product_page_url": "https://dora-hack.devfolio.co/",
     "input": {
       "url": "https://devfolio.co/hackathons"
     }
@@ -86,21 +55,6 @@
     "participation_count": 1000,
     "hackathon_url": "https://hefty-hacks.devfolio.co/",
     "product_page_url": "https://hefty-hacks.devfolio.co/",
-    "input": {
-      "url": "https://devfolio.co/hackathons"
-    }
-  },
-  {
-    "name": "Dora Hack 2.0",
-    "themes": [
-      "No Restrictions"
-    ],
-    "mode": "Online",
-    "status": "Open",
-    "start_date": "Starts 20/08/26",
-    "participation_count": 1000,
-    "hackathon_url": "https://dora-hack.devfolio.co/",
-    "product_page_url": "https://dora-hack.devfolio.co/",
     "input": {
       "url": "https://devfolio.co/hackathons"
     }
@@ -128,7 +82,7 @@
     "mode": "Online",
     "status": "Open",
     "start_date": "Starts 11/09/26",
-    "participation_count": 100,
+    "participation_count": 250,
     "hackathon_url": "https://fusionix-1.devfolio.co/",
     "product_page_url": "https://fusionix-1.devfolio.co/",
     "input": {
@@ -151,21 +105,6 @@
     }
   },
   {
-    "name": "Recursion Edition II",
-    "themes": [
-      "No Restrictions"
-    ],
-    "mode": "Offline",
-    "status": "Open",
-    "start_date": "Starts 03/09/26",
-    "participation_count": 250,
-    "hackathon_url": "https://recursion-edition.devfolio.co/",
-    "product_page_url": "https://recursion-edition.devfolio.co/",
-    "input": {
-      "url": "https://devfolio.co/hackathons"
-    }
-  },
-  {
     "name": "CodeStorm 2026: FutureForge",
     "themes": [
       "Design",
@@ -177,6 +116,21 @@
     "participation_count": 500,
     "hackathon_url": "https://codestorm-futureforge.devfolio.co/",
     "product_page_url": "https://codestorm-futureforge.devfolio.co/",
+    "input": {
+      "url": "https://devfolio.co/hackathons"
+    }
+  },
+  {
+    "name": "Recursion Edition II",
+    "themes": [
+      "No Restrictions"
+    ],
+    "mode": "Offline",
+    "status": "Open",
+    "start_date": "Starts 03/09/26",
+    "participation_count": 500,
+    "hackathon_url": "https://recursion-edition.devfolio.co/",
+    "product_page_url": "https://recursion-edition.devfolio.co/",
     "input": {
       "url": "https://devfolio.co/hackathons"
     }
@@ -216,6 +170,21 @@
     }
   },
   {
+    "name": "VENTURE'26",
+    "themes": [
+      "No Restrictions"
+    ],
+    "mode": "Offline",
+    "status": "Open",
+    "start_date": "Starts 10/09/26",
+    "participation_count": 500,
+    "hackathon_url": "https://venture-26.devfolio.co/",
+    "product_page_url": "https://venture-26.devfolio.co/",
+    "input": {
+      "url": "https://devfolio.co/hackathons"
+    }
+  },
+  {
     "name": "Metamorph 2.0",
     "themes": [
       "Blockchain",
@@ -225,7 +194,7 @@
     "mode": "Offline",
     "status": "Open",
     "start_date": "Starts 12/09/26",
-    "participation_count": 500,
+    "participation_count": 1000,
     "hackathon_url": "https://metamorph-2.devfolio.co/",
     "product_page_url": "https://metamorph-2.devfolio.co/",
     "input": {
@@ -240,7 +209,7 @@
     "mode": "Offline",
     "status": "Open",
     "start_date": "Starts 01/09/26",
-    "participation_count": 100,
+    "participation_count": 250,
     "hackathon_url": "https://hackverse-into-the-web.devfolio.co/",
     "product_page_url": "https://hackverse-into-the-web.devfolio.co/",
     "input": {
@@ -278,21 +247,6 @@
     }
   },
   {
-    "name": "WebCraft24",
-    "themes": [
-      "No Restrictions"
-    ],
-    "mode": "Offline",
-    "status": "Open",
-    "start_date": "Starts 25/09/26",
-    "participation_count": 250,
-    "hackathon_url": "https://webcraft24.devfolio.co/",
-    "product_page_url": "https://webcraft24.devfolio.co/",
-    "input": {
-      "url": "https://devfolio.co/hackathons"
-    }
-  },
-  {
     "name": "DOMINION 2026",
     "themes": [
       "No Restrictions"
@@ -303,6 +257,21 @@
     "participation_count": 100,
     "hackathon_url": "https://dominion2026.devfolio.co/",
     "product_page_url": "https://dominion2026.devfolio.co/",
+    "input": {
+      "url": "https://devfolio.co/hackathons"
+    }
+  },
+  {
+    "name": "WebCraft24",
+    "themes": [
+      "No Restrictions"
+    ],
+    "mode": "Offline",
+    "status": "Open",
+    "start_date": "Starts 25/09/26",
+    "participation_count": 250,
+    "hackathon_url": "https://webcraft24.devfolio.co/",
+    "product_page_url": "https://webcraft24.devfolio.co/",
     "input": {
       "url": "https://devfolio.co/hackathons"
     }
@@ -323,15 +292,31 @@
     }
   },
   {
-    "name": "HackTopus'FE",
+    "name": "HACKBIOS 2K26",
     "themes": [
       "No Restrictions"
     ],
     "mode": "Offline",
-    "status": "Upcoming",
+    "status": "Open",
+    "start_date": "Starts 09/10/26",
     "participation_count": 0,
-    "hackathon_url": "https://hacktopusgdg.devfolio.co/",
-    "product_page_url": "https://hacktopusgdg.devfolio.co/",
+    "hackathon_url": "https://hackbios2k26.devfolio.co/",
+    "product_page_url": "https://hackbios2k26.devfolio.co/",
+    "input": {
+      "url": "https://devfolio.co/hackathons"
+    }
+  },
+  {
+    "name": "BOSS Battle",
+    "themes": [
+      "No Restrictions"
+    ],
+    "mode": "Online",
+    "status": "Open",
+    "start_date": "Starts 07/09/26",
+    "participation_count": 0,
+    "hackathon_url": "https://boss-battle.devfolio.co/",
+    "product_page_url": "https://boss-battle.devfolio.co/",
     "input": {
       "url": "https://devfolio.co/hackathons"
     }
@@ -360,6 +345,20 @@
     "participation_count": 0,
     "hackathon_url": "https://hackify-3.devfolio.co/",
     "product_page_url": "https://hackify-3.devfolio.co/",
+    "input": {
+      "url": "https://devfolio.co/hackathons"
+    }
+  },
+  {
+    "name": "HackTopus'FE",
+    "themes": [
+      "No Restrictions"
+    ],
+    "mode": "Offline",
+    "status": "Upcoming",
+    "participation_count": 0,
+    "hackathon_url": "https://hacktopusgdg.devfolio.co/",
+    "product_page_url": "https://hacktopusgdg.devfolio.co/",
     "input": {
       "url": "https://devfolio.co/hackathons"
     }

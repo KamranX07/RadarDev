@@ -35,6 +35,8 @@ main {
     display: flex;
     gap: 12px;
     margin-bottom: 25px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .controls input,
@@ -155,4 +157,65 @@ main {
 
 #health-card.degraded {
     border-color: #f39c12;
+}
+
+/* Refresh button */
+#refresh-btn {
+    height: 48px;
+    padding: 0 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#refresh-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+#refresh-btn:active {
+    transform: translateY(0);
+}
+
+#refresh-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+}
+
+.refresh-icon {
+    font-size: 20px;
+    line-height: 1;
+    display: inline-block;
+}
+
+/* Refresh status message */
+#refresh-message {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-left: 8px;
 }
