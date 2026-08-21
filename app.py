@@ -3,6 +3,8 @@ import json
 import os
 import requests
 import time
+import subprocess
+import threading
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -164,6 +166,103 @@ def health():
         "optional_missing": missing_optional,
         "checked_at": datetime.now().isoformat(timespec="seconds")
     })
+
+@app.route("/api/scraper-status")
+def scraper_status():
+    return jsonify({
+        "collector_id": BRIGHTDATA_COLLECTOR_ID,
+        "status": "healthy",
+        "message": "Scraper is operational",
+        "self_healing": True
+    })
+
+healing_state = {
+    "status": "idle",
+    "message": "Scraper is ready"
+}
+
+def run_healing():
+    global healing_state
+
+    healing_state = {
+        "status": "healing",
+        "message": "AI is repairing the scraper..."
+    }
+
+    prompt = (
+        "The hackathon scraper is intermittently missing start_date values. "
+        "Preserve all existing fields and improve the extraction so start_date "
+        "is captured whenever a hackathon page visibly provides a date. "
+        "Do not remove or rename existing fields."
+    )
+
+    try:
+        command = [
+            "bdata",
+            "scraper",
+            "heal",
+            BRIGHTDATA_COLLECTOR_ID,
+            prompt,
+            "--url",
+            "https://devfolio.co/hackathons",
+            "--pretty",
+            "-o",
+            "heal.json"
+        ]
+
+        import shutil
+
+        bdata_path = shutil.which("bdata")
+
+        if not bdata_path:
+            raise RuntimeError("bdata executable not found")
+
+        command[0] = bdata_path
+
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True
+        )
+
+        if result.returncode != 0:
+            healing_state = {
+                "status": "error",
+                "message": result.stderr[-1000:] or result.stdout[-1000:]
+            }
+            return
+
+        healing_state = {
+            "status": "approval_required",
+            "message": "AI repair is ready for review."
+        }
+
+    except Exception as error:
+        healing_state = {
+            "status": "error",
+            "message": str(error)
+        }
+
+
+@app.route("/api/scraper-heal", methods=["POST"])
+def scraper_heal():
+    if healing_state["status"] == "healing":
+        return jsonify(healing_state), 409
+
+    thread = threading.Thread(target=run_healing)
+    thread.daemon = True
+    thread.start()
+
+    return jsonify({
+        "success": True,
+        "status": "healing",
+        "message": "Scraper healing started."
+    })
+
+
+@app.route("/api/scraper-heal/status")
+def scraper_heal_status():
+    return jsonify(healing_state)
 
 @app.route("/refresh", methods=["POST"])
 def refresh():
