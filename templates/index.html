@@ -66,11 +66,24 @@
         <span>Scraper Health</span>
     </div>
 
+    <div id="healing-card">
+        <strong id="healing-status">Ready</strong>
+        <span>Self-Healing</span>
+    </div>
+
     <div>
         <strong>Bright Data</strong>
         <span>Data Source</span>
     </div>
 
+    </section>
+
+    <section class="healing-controls">
+        <button id="heal-btn" type="button">
+            🔧 Check & Repair Scraper
+        </button>
+
+        <span id="healing-message"></span>
     </section>
 
     <section id="hackathons" class="grid">
@@ -337,6 +350,203 @@ refreshBtn.addEventListener("click", async () => {
         refreshBtn.textContent = "🔄 Refresh Data";
     }
 });
+</script>
+
+<script>
+const healBtn = document.getElementById("heal-btn");
+const healingStatus = document.getElementById("healing-status");
+const healingMessage = document.getElementById("healing-message");
+
+let healingTimer = null;
+let approvalMode = false;
+
+healBtn.addEventListener("click", async () => {
+
+    if(approvalMode) {
+        await reviewRepair();
+        return;
+    }
+    healBtn.disabled = true;
+    healBtn.textContent = "⏳ Repairing...";
+    healingStatus.textContent = "Healing";
+    healingMessage.textContent =
+        "AI is analyzing the scraper...";
+
+    try {
+
+        const response = await fetch(
+            "/api/scraper-heal",
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Healing could not be started."
+            );
+        }
+
+        checkHealingStatus();
+
+    } catch (error) {
+
+        console.error("Healing error:", error);
+
+        healingStatus.textContent = "Error";
+        healingMessage.textContent =
+            "❌ " + error.message;
+
+        healBtn.disabled = false;
+        healBtn.textContent =
+            "🔧 Check & Repair Scraper";
+    }
+});
+
+
+async function checkHealingStatus() {
+
+    try {
+
+        const response = await fetch(
+            "/api/scraper-heal/status"
+        );
+
+        const data = await response.json();
+
+        if (data.status === "healing") {
+
+            healingStatus.textContent = "Healing";
+            healingMessage.textContent =
+                "⏳ AI is repairing the scraper...";
+
+            healingTimer = setTimeout(
+                checkHealingStatus,
+                3000
+            );
+
+        } else if (
+            data.status === "approval_required"
+        ) {
+            approvalMode = true;
+
+            healingStatus.textContent =
+                "Review Required";
+
+            healingMessage.textContent =
+                "🔧 AI repair is ready for review.";
+
+            healBtn.disabled = false;
+            healBtn.textContent =
+                "Review Repair";
+
+        } else if (data.status === "idle") {
+
+            healingStatus.textContent = "Ready";
+            healingMessage.textContent =
+                "Scraper is ready.";
+
+            healBtn.disabled = false;
+            healBtn.textContent =
+                "🔧 Check & Repair Scraper";
+
+        } else if (data.status === "error") {
+
+            healingStatus.textContent = "Error";
+            healingMessage.textContent =
+                "❌ " + data.message;
+
+            healBtn.disabled = false;
+            healBtn.textContent =
+                "🔧 Try Again";
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Healing status error:",
+            error
+        );
+
+        healingStatus.textContent = "Offline";
+        healingMessage.textContent =
+            "Unable to check healing status.";
+
+        healBtn.disabled = false;
+        healBtn.textContent =
+            "🔧 Check & Repair Scraper";
+    }
+}
+
+async function reviewRepair() {
+
+    const approved = confirm(
+        "AI repair is ready for review.\n\n" +
+        "The proposed repair will be approved and " +
+        "the scraper configuration will be updated.\n\n" +
+        "Approve this repair?"
+    );
+
+    if (!approved) {
+        return;
+    }
+
+    healBtn.disabled = true;
+    healBtn.textContent = "⏳ Approving...";
+    healingMessage.textContent =
+        "Applying the approved repair...";
+
+    try {
+
+        const response = await fetch(
+            "/api/scraper-heal/approve",
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.error ||
+                data.message ||
+                "Approval failed"
+            );
+        }
+
+        healingStatus.textContent = "Repaired";
+        healingMessage.textContent =
+            "✅ AI repair approved successfully.";
+
+        approvalMode = false;
+
+        healBtn.textContent = "✅ Repair Approved";
+        healBtn.disabled = true;
+
+    } catch (error) {
+
+        console.error(
+            "Approval error:",
+            error
+        );
+
+        healingStatus.textContent = "Error";
+
+        healingMessage.textContent =
+            "❌ " + error.message;
+
+        approvalMode = true;
+
+        healBtn.disabled = false;
+        healBtn.textContent =
+            "Review Repair";
+    }
+}
 </script>
 
 </body>

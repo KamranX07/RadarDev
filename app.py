@@ -243,6 +243,34 @@ def run_healing():
             "message": str(error)
         }
 
+@app.route("/api/scraper-heal/progress")
+def scraper_heal_progress():
+    url = (
+        "https://api.brightdata.com/dca/collectors/"
+        f"{BRIGHTDATA_COLLECTOR_ID}/refactor_template/progress"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {BRIGHTDATA_API_KEY}"
+    }
+
+    try:
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=30
+        )
+
+        return jsonify({
+            "http_status": response.status_code,
+            "bright_data": response.json()
+        }), response.status_code
+
+    except Exception as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 500
 
 @app.route("/api/scraper-heal", methods=["POST"])
 def scraper_heal():
@@ -263,6 +291,67 @@ def scraper_heal():
 @app.route("/api/scraper-heal/status")
 def scraper_heal_status():
     return jsonify(healing_state)
+
+@app.route("/api/scraper-heal/approve", methods=["POST"])
+def scraper_heal_approve():
+    global healing_state
+
+    collector_id = BRIGHTDATA_COLLECTOR_ID
+
+    if not collector_id:
+        return jsonify({
+            "success": False,
+            "error": "Bright Data collector ID is missing"
+        }), 500
+
+    try:
+        command = [
+            "bdata",
+            "scraper",
+            "approve",
+            collector_id,
+            "--url",
+            "https://devfolio.co/hackathons",
+            "--pretty",
+            "-o",
+            "approve.json"
+        ]
+
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True
+        )
+
+        if result.returncode != 0:
+            healing_state = {
+                "status": "error",
+                "message": (
+                    result.stderr[-1000:]
+                    or result.stdout[-1000:]
+                    or "Approval failed"
+                )
+            }
+
+            return jsonify(healing_state), 500
+
+        healing_state = {
+            "status": "done",
+            "message": "AI repair approved successfully."
+        }
+
+        return jsonify({
+            "success": True,
+            **healing_state
+        })
+
+    except Exception as error:
+        healing_state = {
+            "status": "error",
+            "message": str(error)
+        }
+
+        return jsonify(healing_state), 500
 
 @app.route("/refresh", methods=["POST"])
 def refresh():
