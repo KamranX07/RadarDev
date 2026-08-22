@@ -198,7 +198,7 @@ def run_healing():
 
     try:
         command = [
-            "bdata",
+            "bdata.cmd",
             "scraper",
             "heal",
             BRIGHTDATA_COLLECTOR_ID,
@@ -306,7 +306,7 @@ def scraper_heal_approve():
 
     try:
         command = [
-            "bdata",
+            "bdata.cmd",
             "scraper",
             "approve",
             collector_id,
