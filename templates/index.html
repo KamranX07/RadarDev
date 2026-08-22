@@ -9,10 +9,50 @@
 
 <body>
 
-<header>
-    <div>
-        <h1>OpportunityRadar 🚀</h1>
-        <p>Discover hackathons without searching dozens of pages.</p>
+<header class="hero">
+    <div class="hero-content">
+
+        <div class="hero-eyebrow">
+            <span class="hero-dot"></span>
+            INTELLIGENT HACKATHON DISCOVERY
+        </div>
+
+        <h1>
+            Find the right
+            <span>hackathon.</span>
+            Faster.
+        </h1>
+
+        <p class="hero-description">
+            OpportunityRadar turns live web data into a searchable,
+            structured feed of hackathons — so you can discover
+            opportunities without searching dozens of pages.
+        </p>
+
+        <div class="hero-meta">
+            <span>⚡ Live web data</span>
+            <span>◈ Bright Data</span>
+            <span>🛡 Self-healing scraper</span>
+        </div>
+
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+        <div class="radar-glow"></div>
+
+        <div class="radar-ring ring-1"></div>
+        <div class="radar-ring ring-2"></div>
+        <div class="radar-ring ring-3"></div>
+
+        <div class="radar-sweep"></div>
+
+        <div class="radar-center">
+            <span>R</span>
+        </div>
+
+        <div class="radar-point point-1"></div>
+        <div class="radar-point point-2"></div>
+        <div class="radar-point point-3"></div>
     </div>
 </header>
 
@@ -54,27 +94,136 @@
         </select>
     </section>
 
-    <section class="stats">
+    <section class="radar-status">
 
-    <div>
-        <strong id="hackathon-count">{{ opportunities|length }}</strong>
-        <span>Hackathons</span>
-    </div>
+        <div class="section-heading">
+            <div>
+                <span class="section-kicker">RADAR STATUS</span>
+                <h2>Opportunity intelligence at a glance</h2>
+            </div>
 
-    <div id="health-card">
-        <strong id="health-status">Checking...</strong>
-        <span>Scraper Health</span>
-    </div>
+            <p>
+                Live collection, structured data, and automated scraper
+                reliability — all in one place.
+            </p>
+        </div>
 
-    <div id="healing-card">
-        <strong id="healing-status">Ready</strong>
-        <span>Self-Healing</span>
-    </div>
+        <div class="status-grid">
 
-    <div>
-        <strong>Bright Data</strong>
-        <span>Data Source</span>
-    </div>
+            <!-- Opportunities -->
+            <article class="status-card opportunities-card">
+                <div class="status-icon">◈</div>
+
+                <div class="status-content">
+                    <span class="status-label">OPPORTUNITIES</span>
+
+                    <strong id="hackathon-count">
+                        {{ opportunities|length }}
+                    </strong>
+
+                    <span class="status-description">
+                        Hackathons indexed
+                    </span>
+                </div>
+            </article>
+
+
+            <!-- Scraper health -->
+            <article class="status-card health-card" id="health-card">
+
+                <div class="status-icon health-icon">
+                    <span></span>
+                </div>
+
+                <div class="status-content">
+                    <span class="status-label">SCRAPER HEALTH</span>
+
+                    <strong id="health-status">
+                        Checking...
+                    </strong>
+
+                    <span class="status-description">
+                        Data quality monitor
+                    </span>
+                </div>
+
+            </article>
+
+
+            <!-- Self healing -->
+            <article class="status-card healing-card">
+
+                <div class="status-icon healing-icon">
+                    ✦
+                </div>
+
+                <div class="status-content">
+                    <span class="status-label">SELF-HEALING</span>
+
+                    <strong id="healing-status">
+                        Ready
+                    </strong>
+
+                    <span class="status-description">
+                        Automatic recovery system
+                    </span>
+                </div>
+
+            </article>
+
+
+            <!-- Bright Data -->
+            <article class="status-card source-card">
+
+                <div class="status-icon source-icon">
+                    ◉
+                </div>
+
+                <div class="status-content">
+                    <span class="status-label">DATA SOURCE</span>
+
+                    <strong>Bright Data</strong>
+
+                    <span class="status-description">
+                        Scraper Studio collection
+                    </span>
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="pipeline">
+
+            <div class="pipeline-label">
+                <span class="pipeline-pulse"></span>
+                LIVE DATA PIPELINE
+            </div>
+
+            <div class="pipeline-flow">
+
+                <span>Web discovery</span>
+
+                <i>→</i>
+
+                <span>Bright Data</span>
+
+                <i>→</i>
+
+                <span>Structured records</span>
+
+                <i>→</i>
+
+                <span>Health monitoring</span>
+
+                <i>→</i>
+
+                <span>Self-healing</span>
+
+            </div>
+
+        </div>
 
     </section>
 
@@ -289,23 +438,35 @@ async function checkHealth() {
 
         const status = document.getElementById("health-status");
         const card = document.getElementById("health-card");
+        const dot = document.querySelector(".health-icon span");
+
+        // Reset previous states
+        card.classList.remove("healthy", "degraded", "critical");
+        dot.classList.remove("healthy-dot", "degraded-dot", "critical-dot");
 
         if (data.status === "healthy") {
-            status.textContent = "🟢 Healthy " + data.data_quality + "%";
+            status.textContent = "Healthy " + data.data_quality + "%";
+
             card.classList.add("healthy");
+            dot.classList.add("healthy-dot");
+
         } else if (data.status === "degraded") {
-            status.textContent = "🟠 Degraded " + data.data_quality + "%";
+            status.textContent = "Degraded " + data.data_quality + "%";
+
             card.classList.add("degraded");
+            dot.classList.add("degraded-dot");
+
         } else {
-            status.textContent = "🔴 Critical";
-            card.classList.add("degraded");
+            status.textContent = "Critical";
+
+            card.classList.add("critical");
+            dot.classList.add("critical-dot");
         }
 
         console.log("Scraper health:", data);
 
     } catch (error) {
-        document.getElementById("health-status").textContent =
-            "🔴 Offline";
+        console.error("Health check failed:", error);
     }
 }
 
@@ -318,7 +479,8 @@ const refreshMessage = document.getElementById("refresh-message");
 
 refreshBtn.addEventListener("click", async () => {
     refreshBtn.disabled = true;
-    refreshBtn.textContent = "⏳ Refreshing...";
+    refreshBtn.classList.add("loading");
+    refreshBtn.innerHTML = `<span class="refresh-icon">↻</span> Refreshing...`;
     refreshMessage.textContent = "Fetching fresh hackathons...";
 
     try {
@@ -333,9 +495,8 @@ refreshBtn.addEventListener("click", async () => {
         }
 
         refreshMessage.textContent =
-            `✅ Updated ${data.records} hackathons`;
+            `Updated ${data.records} hackathons`;
 
-        // Reload dashboard with the newly saved data
         setTimeout(() => {
             window.location.reload();
         }, 1000);
@@ -347,7 +508,9 @@ refreshBtn.addEventListener("click", async () => {
             "❌ Refresh failed: " + error.message;
 
         refreshBtn.disabled = false;
-        refreshBtn.textContent = "🔄 Refresh Data";
+        refreshBtn.classList.remove("loading");
+        refreshBtn.innerHTML =
+            `<span class="refresh-icon">↻</span> Refresh Data`;
     }
 });
 </script>
