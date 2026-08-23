@@ -1,267 +1,260 @@
-# 🚀 OpportunityRadar
+# RadarDev
 
-> **Find the right hackathon. Faster.**
+> **Self-healing hackathon opportunity intelligence powered by Bright Data**
 
-OpportunityRadar is an intelligent hackathon discovery platform that turns live web data into a searchable, structured opportunity feed.
+RadarDev discovers hackathon opportunities from the public web, turns them into structured records, monitors the quality of the collected data, and provides an approval-based self-healing workflow when the scraper needs repair.
 
-Instead of manually searching dozens of hackathon pages, users can discover opportunities through a single dashboard with search, filtering, sorting, live data refresh, scraper health monitoring, and an AI-assisted self-healing workflow.
-
----
-
-## 🎯 The Problem
-
-Hackathon opportunities are scattered across different pages and platforms.
-
-Finding the right opportunity often means:
-
-- Searching multiple websites
-- Comparing different event pages
-- Checking whether opportunities are still active
-- Manually tracking dates and participation
-- Repeating the process whenever the underlying websites change
-
-OpportunityRadar turns this fragmented discovery process into a single intelligent interface.
+**Live demo:** https://radardev.onrender.com/
 
 ---
 
-## 💡 The Solution
+## What RadarDev does
 
-OpportunityRadar transforms web data into structured hackathon opportunities.
-
-The system:
-
-1. Collects hackathon data through **Bright Data Scraper Studio**
-2. Structures the collected records
-3. Stores the resulting opportunity data
-4. Presents the data through a searchable dashboard
-5. Monitors scraper health and data quality
-6. Detects degraded extraction
-7. Initiates an AI-assisted scraper healing workflow
-8. Requests human approval before committing a proposed repair
-9. Applies the approved repair through the Bright Data CLI
-
-### Core Workflow
+RadarDev is built around a simple pipeline:
 
 ```text
-Web Discovery
-      ↓
+Public Hackathon Web
+        │
+        ▼
 Bright Data Scraper Studio
-      ↓
+        │
+        ▼
 Structured Hackathon Records
-      ↓
-OpportunityRadar Dashboard
-      ↓
-Health Monitoring
-      ↓
-AI-Assisted Self-Healing
-      ↓
-Human Approval
-      ↓
-Bright Data Repair
-      ↓
-Healthy Scraper
+        │
+        ▼
+RadarDev Health Monitoring
+        │
+        ├── Healthy ───────────────► Dashboard
+        │
+        └── Degraded
+                │
+                ▼
+        AI-assisted self-healing
+                │
+                ▼
+        Human approval
+                │
+                ▼
+        Bright Data CLI
+                │
+                ▼
+        Repaired scraper
 ```
 
----
-
-## ⚡ Why OpportunityRadar?
-
-OpportunityRadar isn't simply a list of scraped hackathons.
-
-It combines **discovery + data quality + reliability** into one product.
-
-The system is designed to answer two questions:
-
-> **What opportunities are available?**
-
-and
-
-> **Can I trust the data powering this dashboard?**
-
-That second question drives the self-healing architecture.
+The application currently demonstrates this workflow with hackathon data, including fields such as title, dates, organizer, location, participation information, and source links.
 
 ---
 
-## 🛡️ Self-Healing Scraper
+## Key features
 
-Web scrapers can break when websites change.
+- **Hackathon discovery** from public web pages through Bright Data Scraper Studio.
+- **Structured records** consumed by the RadarDev application.
+- **Search, filtering, and sorting** for hackathon opportunities.
+- **Data-quality monitoring** with a visible health score.
+- **Self-healing workflow** for scraper degradation.
+- **Human-in-the-loop approval** before a proposed repair is accepted.
+- **Bright Data CLI integration** for scraper operations and healing.
+- **Production deployment** on Render.
+- **Environment-based secrets** so API credentials are not committed to Git.
 
-OpportunityRadar includes a health monitoring and self-healing workflow designed to detect these problems and recover the scraper.
+---
 
-### Healing Workflow
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Python + Flask |
+| Frontend | HTML, CSS, JavaScript |
+| Web extraction | Bright Data Scraper Studio |
+| Scraper control / healing | Bright Data CLI |
+| Configuration | `.env` / environment variables |
+| Dependency management | `requirements.txt` |
+| Deployment | Render |
+| Containerization | Docker |
+
+---
+
+## Repository structure
 
 ```text
-Check & Repair Scraper
-        ↓
-Scraper Health Analysis
-        ↓
-AI Repair Proposal
-        ↓
-Human Review
-        ↓
-Approve Repair
-        ↓
-Bright Data CLI
-        ↓
-Repaired Scraper
+RADARDEV/
+├── static/
+│   └── style.css
+├── templates/
+│   └── index.html
+├── .env
+├── .env.sample
+├── .gitignore
+├── app.py
+├── approve.json
+├── Dockerfile
+├── heal.json
+├── opportunities.json
+├── README.md
+└── requirements.txt
 ```
 
-The repair process intentionally includes a human approval gate.
+### Generated/runtime files
 
-This prevents an AI-generated scraper modification from being silently committed without user approval.
+`heal.json`, `approve.json`, and similar generated output files are runtime artifacts from the self-healing workflow. They should not contain secrets.
+
+The `.gitignore` also protects local development artifacts such as:
+
+```text
+.venv/
+__pycache__/
+*.pyc
+.env
+.vscode/
+heal.json
+approve.json
+```
 
 ---
 
-## 👤 Human-in-the-Loop Approval
+# Setup
 
-When a repair is proposed, OpportunityRadar moves into a review state.
+## 1. Prerequisites
 
-The user sees:
+Install:
 
-```text
-AI repair is ready for review.
-```
+- Python 3.10+ (the project was developed and tested with Python 3.10/3.11)
+- Node.js 20+ for the Bright Data CLI
+- Git
+- A Bright Data account
+- A Bright Data Scraper Studio collector configured for the target hackathon pages
 
-The user can then approve the proposed repair.
+The Bright Data CLI documentation currently recommends Node.js 20+ and supports Windows, macOS, Linux, and WSL.
 
-The application sends the approval to the backend, which invokes the Bright Data CLI:
+Bright Data CLI:
+https://brightdata.com/blog/ai/bright-data-cli
+
+Scraper Studio:
+https://brightdata.com/products/web-scraper/studio
+
+---
+
+## 2. Clone the repository
 
 ```bash
-bdata.cmd scraper approve
-```
-
-Once the operation succeeds, the dashboard reports:
-
-```text
-✅ AI repair approved successfully.
-```
-
-and the self-healing status becomes:
-
-```text
-Repaired
+git clone https://github.com/KamranX07/RadarDev.git
+cd RadarDev
 ```
 
 ---
 
-## 🌐 Bright Data Integration
+## 3. Create a Python virtual environment
 
-Bright Data is a core part of OpportunityRadar's data infrastructure.
+### Windows — Git Bash
 
-The project uses **Bright Data Scraper Studio** for web data collection and the **Bright Data CLI** for scraper healing and approval operations.
+```bash
+python -m venv .venv
+source .venv/Scripts/activate
+```
 
-Bright Data provides the collection and recovery layer while OpportunityRadar provides the discovery experience, monitoring, and user-facing intelligence layer.
+### Windows — PowerShell
 
----
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
 
-## 📊 Dashboard
+### macOS / Linux
 
-The OpportunityRadar dashboard provides:
-
-- 🔎 Hackathon search
-- 🎛️ Mode filtering
-- 🟢 Status filtering
-- ↕️ Sorting
-- 🔄 Live data refresh
-- 📈 Scraper health visibility
-- 🛡️ Self-healing status
-- 🧩 Structured opportunity cards
-- 📱 Responsive interface
-- 🔗 Direct links to hackathon opportunities
-
-### System Status
-
-The dashboard exposes the health of the underlying data pipeline directly to the user.
-
-Example:
-
-```text
-29 Opportunities
-99% Scraper Health
-Ready / Repaired
-Bright Data
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 ---
 
-## 🔄 Live Data Pipeline
-
-OpportunityRadar makes the underlying data flow visible:
-
-```text
-Web discovery
-      →
-Bright Data
-      →
-Structured records
-      →
-Health monitoring
-      →
-Self-healing
-```
-
-This makes the system's reliability understandable without exposing users to unnecessary implementation details.
-
----
-
-## 🧰 Tech Stack
-
-### Frontend
-
-- HTML
-- CSS
-- JavaScript
-
-### Backend
-
-- Python
-- Flask
-
-### Data & Scraping
-
-- Bright Data Scraper Studio
-- Bright Data CLI
-- Structured JSON data
-
-### Reliability
-
-- Scraper health monitoring
-- Data-quality evaluation
-- AI-assisted scraper healing
-- Human approval workflow
-
----
-
-## 🖥️ Running Locally
-
-### Requirements
-
-- Python 3
-- Node.js / npm
-- Bright Data CLI
-- Bright Data credentials/configuration
-
-### Install Python Dependencies
+## 4. Install Python dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Install Bright Data CLI
+The current dependency file contains:
+
+```text
+Flask==3.1.3
+python-dotenv
+requests
+```
+
+---
+
+# Bright Data configuration
+
+RadarDev needs the Bright Data credentials and collector identifier used by the application.
+
+Create a local `.env` file from the provided example:
+
+```bash
+cp .env.sample .env
+```
+
+On Windows, you can also simply copy `.env.sample` to `.env` using your editor.
+
+Set the required values:
+
+```env
+BRIGHTDATA_API_KEY=your_bright_data_api_key
+BRIGHTDATA_COLLECTOR_ID=your_bright_data_collector_id
+```
+
+### Important
+
+**Never commit `.env` to Git.**
+
+The repository's `.gitignore` excludes it intentionally.
+
+Use `.env.sample` as the template for another developer or judge.
+
+---
+
+# Install and verify the Bright Data CLI
+
+RadarDev invokes the Bright Data CLI from Python during the scraper healing workflow.
+
+On Windows:
 
 ```bash
 npm install -g @brightdata/cli
 ```
 
-Verify the CLI:
+Then authenticate/configure the CLI:
+
+```bash
+brightdata login
+```
+
+Verify that the CLI is available:
 
 ```bash
 bdata --version
 ```
 
-### Start the Application
+or:
 
-Run the Flask application using the project's configured startup command.
+```bash
+brightdata --version
+```
+
+The RadarDev backend also performs executable discovery so that Windows installations exposing `bdata.cmd` can be found correctly.
+
+Bright Data's current CLI documentation:
+https://brightdata.com/blog/ai/bright-data-cli
+
+---
+
+# Run RadarDev locally
+
+With the virtual environment activated:
+
+```bash
+python app.py
+```
 
 Then open:
 
@@ -269,180 +262,449 @@ Then open:
 http://127.0.0.1:5000/
 ```
 
----
-
-## 🔐 Configuration
-
-The application expects the required Bright Data configuration to be available through the project's environment/configuration setup.
-
-Do not commit credentials or private API keys to the repository.
+If your environment uses a different Flask startup command, use the command defined by the current `Dockerfile`/application entry point.
 
 ---
 
-## 🎬 Demo Flow
+# Verify the health endpoint
 
-The strongest way to demonstrate OpportunityRadar is:
-
-### 1. Discover
-
-Open the dashboard and show the live hackathon feed.
-
-### 2. Search
-
-Search for a specific opportunity or theme.
-
-### 3. Filter
-
-Use mode and status filters to narrow the results.
-
-### 4. Refresh
-
-Click:
-
-**Refresh Data**
-
-and demonstrate the live data refresh process.
-
-### 5. Monitor
-
-Show:
-
-**Scraper Health — 99%**
-
-and the live data pipeline.
-
-### 6. Heal
-
-Click:
-
-**Check & Repair Scraper**
-
-and show the system detecting that a repair is required.
-
-### 7. Review
-
-The system presents an AI-generated repair for human approval.
-
-### 8. Approve
-
-Approve the proposed repair through the OpportunityRadar interface.
-
-### 9. Recover
-
-Show:
-
-**Self-Healing — Repaired**
-
-This demonstrates the complete:
+RadarDev exposes a health endpoint:
 
 ```text
-Discover → Structure → Monitor → Detect → Heal → Approve → Recover
+GET /health
 ```
 
-workflow.
-
----
-
-## 🏆 What Makes It Different
-
-OpportunityRadar combines a useful consumer-facing experience with infrastructure reliability.
-
-Most opportunity discovery tools stop at:
+For a local server:
 
 ```text
-Scrape → Display
+http://127.0.0.1:5000/health
 ```
 
-OpportunityRadar goes further:
+A healthy response looks like:
+
+```json
+{
+  "checked_at": "2026-08-23T10:37:10",
+  "data_quality": 99.0,
+  "missing_required_fields": [],
+  "optional_missing": 6,
+  "records": 29,
+  "status": "healthy"
+}
+```
+
+The exact values will change as the underlying data changes.
+
+The health monitor is responsible for checking the quality of the structured records rather than simply assuming that a scraper succeeded because a command returned data.
+
+---
+
+# Self-healing workflow
+
+The self-healing feature is the core reliability feature of RadarDev.
+
+The workflow is:
 
 ```text
-Scrape
-  ↓
-Structure
-  ↓
-Monitor
-  ↓
-Detect problems
-  ↓
-Generate repair
-  ↓
-Request approval
-  ↓
-Repair
-  ↓
-Recover
+1. Detect degraded scraper output
+              ↓
+2. Set healing state to "healing"
+              ↓
+3. Invoke Bright Data CLI
+              ↓
+4. Run the scraper healing operation
+              ↓
+5. Save the proposed repair
+              ↓
+6. Set state to "approval_required"
+              ↓
+7. Human reviews the repair
+              ↓
+8. Human approves
+              ↓
+9. Bright Data CLI applies the approval
+              ↓
+10. Set state to "done"
+              ↓
+11. Dashboard reports the scraper as repaired
 ```
 
-The result is an opportunity discovery system designed to remain useful even when the underlying web extraction process changes.
+### Why approval is required
 
----
+RadarDev deliberately does not silently modify the scraper.
 
-## 🌟 Product Experience
-
-OpportunityRadar is designed to make complex data infrastructure understandable through a simple interface.
-
-The dashboard provides:
-
-- A live opportunity feed
-- Visual scraper-health status
-- Self-healing visibility
-- Human-controlled repair approval
-- Real-time refresh feedback
-- Responsive opportunity cards
-- Clear data pipeline visualization
-
-The interface turns an otherwise invisible scraping infrastructure into something users can understand and trust.
-
----
-
-## 🚀 Project Vision
-
-OpportunityRadar can evolve beyond hackathons into a broader opportunity intelligence platform.
-
-The same architecture can support discovery of:
-
-- Hackathons
-- Grants
-- Fellowships
-- Competitions
-- Developer programs
-- Startup opportunities
-- Open-source programs
-
-The long-term vision is an intelligent radar for opportunities across the web — with reliability built into the system rather than treated as an afterthought.
-
----
-
-## 🏁 Current Implementation
-
-The current implementation demonstrates a complete working loop:
+The proposed repair is first surfaced for review:
 
 ```text
-Live Web Data
-      ↓
-Bright Data Scraper Studio
-      ↓
-Structured Opportunities
-      ↓
-OpportunityRadar Dashboard
-      ↓
-Search / Filter / Sort
-      ↓
-Scraper Health Monitoring
-      ↓
-AI-Assisted Repair
-      ↓
-Human Approval
-      ↓
-Bright Data CLI
-      ↓
-Repaired Scraper
+AI repair is ready for review.
 ```
 
-The complete self-healing workflow has been tested end-to-end, including the human approval step and successful repair confirmation.
+After approval:
+
+```text
+AI repair approved successfully.
+```
+
+The dashboard then reflects the repaired state.
+
+This gives the system an explicit **human-in-the-loop safety boundary** between automated repair generation and applying that repair.
 
 ---
 
-## 📜 License
+# How the healing integration works
 
-Add the project's chosen license here.
+The Flask application resolves the Bright Data CLI executable before invoking it.
+
+Conceptually:
+
+```python
+bdata_command = (
+    shutil.which("bdata")
+    or shutil.which("bdata.cmd")
+)
+```
+
+The healing command is then assembled and executed through Python's subprocess support.
+
+The important properties are:
+
+- No hard-coded path to the developer's local Bright Data installation.
+- Windows `.cmd` resolution is supported.
+- CLI stdout/stderr are captured.
+- Non-zero return codes become visible application errors.
+- Successful healing transitions the application into an approval-required state.
+- Approval is a separate explicit operation.
+
+This was important during development because the CLI worked directly in the terminal while Python initially could not resolve the same executable on Windows.
+
+---
+
+# Scraper health
+
+RadarDev separates **scraper execution** from **data quality**.
+
+A scraper can technically return data while still producing incomplete records.
+
+For example, during development we encountered a situation where `start_date` was intermittently missing even though the scraper continued to return records.
+
+The health monitor therefore checks the resulting structured dataset and reports:
+
+- record count
+- data-quality percentage
+- missing required fields
+- optional missing fields
+- health status
+- check timestamp
+
+This makes silent scraper degradation visible to the application.
+
+---
+
+# API endpoints
+
+The Flask application provides the dashboard and backend endpoints used by the frontend.
+
+The health endpoint is:
+
+```text
+GET /health
+```
+
+The self-healing workflow includes:
+
+```text
+POST /api/scraper-heal/approve
+```
+
+and a progress/status endpoint under:
+
+```text
+/api/scraper-heal/progress
+```
+
+The exact implementation is available directly in `app.py`.
+
+---
+
+# Deployment
+
+RadarDev is deployed on Render.
+
+Production:
+
+https://radardev.onrender.com/
+
+The deployment requires the same runtime configuration as local execution, especially:
+
+```text
+BRIGHTDATA_API_KEY
+BRIGHTDATA_COLLECTOR_ID
+```
+
+These should be configured as **Render environment variables**, not committed to the repository.
+
+The repository also includes:
+
+```text
+Dockerfile
+```
+
+for container-based deployment.
+
+---
+
+# Docker
+
+Docker support is included in the repository.
+
+Build:
+
+```bash
+docker build -t radardev .
+```
+
+Run:
+
+```bash
+docker run --env-file .env -p 5000:5000 radardev
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5000/
+```
+
+> If you are using the Render deployment, you do not need Docker locally. The production deployment can build from the repository's Docker configuration.
+
+---
+
+# Reproducing the demo
+
+After configuring Bright Data and starting RadarDev:
+
+### 1. Open the dashboard
+
+```text
+http://127.0.0.1:5000/
+```
+
+### 2. Verify the data
+
+Confirm that hackathon opportunity cards are displayed.
+
+### 3. Check health
+
+Open:
+
+```text
+http://127.0.0.1:5000/health
+```
+
+Confirm that the endpoint returns JSON with a health status and data-quality score.
+
+### 4. Run the scraper/healing workflow
+
+Use the dashboard's scraper health/self-healing controls.
+
+When a repair is generated, RadarDev should transition to:
+
+```text
+approval_required
+```
+
+### 5. Review and approve
+
+Review the proposed repair and approve it.
+
+The successful state is:
+
+```text
+status: done
+```
+
+and the dashboard reports:
+
+```text
+AI repair approved successfully.
+```
+
+The self-healing card can then show the repaired state.
+
+---
+
+# Troubleshooting
+
+## `bdata` is not recognized
+
+Check:
+
+```bash
+bdata --version
+```
+
+and:
+
+```bash
+brightdata --version
+```
+
+On Windows, verify that the npm global binary directory is on `PATH`.
+
+RadarDev also checks for:
+
+```text
+bdata
+bdata.cmd
+```
+
+because Windows may expose the executable as a `.cmd` shim.
+
+---
+
+## Bright Data collector ID is missing
+
+Verify that `.env` contains:
+
+```env
+BRIGHTDATA_COLLECTOR_ID=...
+```
+
+and restart the Flask application after changing environment variables.
+
+---
+
+## Bright Data API key is missing
+
+Verify:
+
+```env
+BRIGHTDATA_API_KEY=...
+```
+
+Do not paste the key into `app.py` or commit it to Git.
+
+---
+
+## `/health` shows an error
+
+Open the endpoint directly:
+
+```text
+http://127.0.0.1:5000/health
+```
+
+The JSON response includes diagnostic information such as missing required fields and the current record count.
+
+---
+
+## Self-healing takes a long time
+
+Healing is an external operation and can take longer than normal application requests.
+
+Check the dashboard's healing/progress state and inspect the CLI output captured by the Flask application.
+
+Do not assume that a long-running operation means that the underlying scraper is permanently broken.
+
+---
+
+# Security
+
+Never commit:
+
+```text
+.env
+```
+
+or API credentials.
+
+Use environment variables for:
+
+```text
+BRIGHTDATA_API_KEY
+BRIGHTDATA_COLLECTOR_ID
+```
+
+The repository intentionally excludes `.env` through `.gitignore`.
+
+If an API key is accidentally exposed, rotate it immediately in Bright Data.
+
+---
+
+# Design principles
+
+RadarDev follows a few principles that shaped the implementation:
+
+### 1. Don't trust scraper success blindly
+
+A successful scraper process does not necessarily mean that the data is complete.
+
+### 2. Preserve existing fields
+
+The healing prompt explicitly asks the repair process to preserve existing fields and avoid renaming/removing them.
+
+### 3. Human approval before repair
+
+Automated repair generation is useful, but applying a scraper change is a meaningful production operation. RadarDev therefore puts a human approval step between proposed repair and application.
+
+### 4. Keep environment-specific configuration outside the code
+
+Credentials and local executable paths should never be hard-coded.
+
+### 5. Handle platform differences
+
+The Bright Data CLI is discovered dynamically rather than relying on a developer-specific Windows path.
+
+---
+
+# Why Bright Data Scraper Studio?
+
+Scraper Studio is the extraction layer that turns the public hackathon web into structured data consumed by RadarDev.
+
+Its self-healing capability is particularly important to this project because the scraper is treated as a living component of the application rather than a one-time script.
+
+Bright Data describes Scraper Studio as supporting AI-generated scrapers, structured data delivery, monitoring, and self-healing workflows.
+
+Learn more:
+
+https://brightdata.com/products/web-scraper/studio
+
+---
+
+# Project outcome
+
+RadarDev demonstrates a complete data reliability loop:
+
+```text
+DISCOVER
+   ↓
+SCRAPE
+   ↓
+STRUCTURE
+   ↓
+MONITOR
+   ↓
+DETECT
+   ↓
+HEAL
+   ↓
+APPROVE
+   ↓
+RECOVER
+```
+
+The result is a hackathon opportunity platform where the data collection layer is not treated as a fragile black box.
+
+---
+
+# Live project
+
+**Production:** https://radardev.onrender.com/
+
+**Source:** https://github.com/KamranX07/RadarDev
+
+---
+
+## Built for Scrape Verse Hackathon
+
+RadarDev was built to demonstrate practical use of Bright Data Scraper Studio, the Bright Data CLI, structured web data, and an approval-based self-healing workflow.
