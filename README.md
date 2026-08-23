@@ -2,7 +2,7 @@
 
 > **Self-healing hackathon opportunity intelligence powered by Bright Data**
 
-RadarDev discovers hackathon opportunities from the public web, turns them into structured records, monitors the quality of the collected data, and provides an approval-based self-healing workflow when the scraper needs repair.
+**RadarDev** or **OpportunityRadar** discovers hackathon opportunities from the public web, turns them into structured records, monitors the quality of the collected data, and provides an approval-based self-healing workflow when the scraper needs repair.
 
 **Live demo:** https://radardev.onrender.com/
 
