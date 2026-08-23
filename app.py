@@ -5,6 +5,7 @@ import requests
 import time
 import subprocess
 import threading
+import shutil
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -190,15 +191,37 @@ def run_healing():
     }
 
     prompt = (
-        "The hackathon scraper is intermittently missing start_date values. "
-        "Preserve all existing fields and improve the extraction so start_date "
-        "is captured whenever a hackathon page visibly provides a date. "
-        "Do not remove or rename existing fields."
+        "Analyze the current scraper output and identify why start_date is "
+        "intermittently missing. "
+        "Improve the existing scraper so that start_date is extracted "
+        "whenever a hackathon page visibly provides it. "
+        "Preserve all existing fields and field names. "
+        "Do not remove or rename existing fields. "
+        "Do not change unreleated extraction behaviour. "
+        "Prefer reliable date information from visible page content or "
+        "structured data. "
+        "Make the smallest necessary scraper change. "
+        "Return a repair only if an actual improvement is identified."
     )
 
     try:
+        bdata_command = (
+            shutil.which("bdata")
+            or shutil.which("bdata.cmd")
+        )
+        
+        if not bdata_command:
+            healing_state = {
+                "status": "error",
+                "message": (
+                    "Bright Data CLI was not found. "
+                    "Please install/configure the bdata CLI."
+                )
+            }
+            return jsonify(healing_state), 500
+
         command = [
-            "bdata.cmd",
+            bdata_command,
             "scraper",
             "heal",
             BRIGHTDATA_COLLECTOR_ID,
@@ -209,15 +232,6 @@ def run_healing():
             "-o",
             "heal.json"
         ]
-
-        import shutil
-
-        bdata_path = shutil.which("bdata")
-
-        if not bdata_path:
-            raise RuntimeError("bdata executable not found")
-
-        command[0] = bdata_path
 
         result = subprocess.run(
             command,
@@ -305,8 +319,23 @@ def scraper_heal_approve():
         }), 500
 
     try:
+        bdata_command = (
+            shutil.which("bdata")
+            or shutil.which("bdata.cmd")
+        )
+
+        if not bdata_command:
+            healing_state = {
+                "status": "error",
+                "message": (
+                    "Bright Data CLI was not found. "
+                    "Please install/configure the bdata CLI."
+                )
+            }
+            return jsonify(healing_state), 500
+
         command = [
-            "bdata.cmd",
+            bdata_command,
             "scraper",
             "approve",
             collector_id,
