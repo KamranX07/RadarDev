@@ -5,6 +5,7 @@
 **RadarDev** or **OpportunityRadar** discovers hackathon opportunities from the public web, turns them into structured records, monitors the quality of the collected data, and provides an approval-based self-healing workflow when the scraper needs repair.
 
 **Live demo:** https://radardev.onrender.com/
+**Youtube Video:** https://youtu.be/9wEIrUhzlYY
 
 ---
 
@@ -705,6 +706,6 @@ The result is a hackathon opportunity platform where the data collection layer i
 
 ---
 
-## Built for Scrape Verse Hackathon
+## Built for Into the Scrape-Verse Hackathon
 
 RadarDev was built to demonstrate practical use of Bright Data Scraper Studio, the Bright Data CLI, structured web data, and an approval-based self-healing workflow.
